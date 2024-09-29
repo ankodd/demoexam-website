@@ -1,6 +1,18 @@
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import Cookies from 'js-cookie';
+import Button from "../../ui/button/Button.tsx";
+import Input from "../../ui/input/Input.tsx";
+import Header from "../header/Header.tsx";
+
+interface LoginData {
+  username: string
+  password: string
+}
+
+interface ResponseData {
+  id: number
+}
 
 /**
  * Login component.
@@ -11,12 +23,14 @@ import Cookies from 'js-cookie';
  */
 function Login(): React.ReactElement {
   const navigate = useNavigate()
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [data, setData] = useState<LoginData>({
+    username: "",
+    password: "",
+  })
   const [isLoading, setIsLoading] = useState(false)
 
   const handleLogout = () => {
-    Cookies.remove('isLogged');
+    Cookies.remove("isLogged");
     navigate('/');
   }
 
@@ -25,21 +39,16 @@ function Login(): React.ReactElement {
     return (
       <div className="registration-cart">
         <p>Вы уже вошли в систему</p>
-        <button onClick={handleLogout} disabled={isLoading}>
+        <Button onClick={handleLogout} disabled={isLoading}>
           {isLoading ? "Выход..." : "Выход из аккаунта"}
-        </button>
-        <Link to="/">Перейти в профиль</Link>
+        </Button>
+        <Link to="/profile">Перейти в профиль</Link>
       </div>
     );
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
-    const userData = {
-      username,
-      password,
-    }
 
 	  try {
       const response = await fetch('http://localhost:8080/api/users/login', {
@@ -47,21 +56,25 @@ function Login(): React.ReactElement {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(data),
       })
 
       if (!response.ok) {
         throw new Error('Failed to login')
       }
 
-      const data = await response.json()
-      console.log(data)
+      const res: ResponseData = await response.json()
+      console.log(res.id)
 
       if (Cookies.get("isLogged") == undefined) {
         Cookies.set('isLogged', 'true', {expires: 15})
       }
 
-      navigate('/')
+      if (Cookies.get("userID") == undefined) {
+        Cookies.set('userID', res.id.toString(), {expires: 15})
+      }
+
+      navigate(`/profile`)
     } catch (error) {
       console.log(error)
     } finally {
@@ -70,39 +83,58 @@ function Login(): React.ReactElement {
   }
 
   return (
-    <div className="login-cart">
-      {/* Login form */}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="username">Имя пользователя</label>
-          <input
-            type="text"
-            name="username"
-            id="username"
-            value={username}
-            required
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password" className="text-3xl hover:bg-sky-700">Пароль</label>
-          <input
-            type="text"
-            name="password"
-            id="password"
-            value={password}
-            required
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
-        <div className="form-button">
-          <button type="submit" disabled={isLoading}>
-            {isLoading ? 'Вход...' : 'Войти'}
-          </button>
-        </div>
-      </form>
-      <Link to="/registration">Нету аккаунта? Регистрация</Link>
-    </div>
+    <>
+      <Header links={[]}/>
+      <div className="flex justify-center items-center flex-col w-full h-full">
+        {/* Login form */}
+        <form onSubmit={handleSubmit}
+              className="transition ease-in border-4 border-sky-300 p-4 rounded-xl hover:shadow-2xl hover:shadow-sky-200">
+          <div className="flex py-4 justify-between border-b-4 items-center">
+            <label htmlFor="username" className="mr-12">Имя пользователя</label>
+            <Input
+              type="text"
+              name="username"
+              id="username"
+              value={data.username}
+              required
+              onChange={(e) => {
+                e.target.value = e.target.value.trim();
+                setData({
+                  ...data,
+                  username: e.target.value,
+                });
+              }}
+            />
+          </div>
+          <div className="flex py-4 justify-between border-b-4 items-center">
+            <label htmlFor="password" className="mr-12">Пароль</label>
+            <Input
+              type="password"
+              name="password"
+              id="password"
+              value={data.password}
+              required
+              onChange={(e) => {
+                e.target.value = e.target.value.trim();
+                setData({
+                  ...data,
+                  password: e.target.value,
+                });
+              }}
+            />
+          </div>
+          <div className="flex mb-8 justify-center items-center pt-8">
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Вход...' : 'Войти'}
+            </Button>
+          </div>
+          <div className='flex justify-center items-center flex-col'>
+            <p>Ещё нету аккаунта?</p>
+            <Link to="/registration" className='poppins-bold hover:text-sky-500 transition p-4'>Регистрация</Link>
+          </div>
+        </form>
+      </div>
+    </>
   )
 }
 

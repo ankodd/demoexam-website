@@ -4,8 +4,8 @@ import App from './App.tsx'
 import {createBrowserRouter, RouterProvider, } from "react-router-dom";
 import Registration from "./components/auth/Registration.tsx";
 import Login from "./components/auth/Login.tsx";
-import AuthCart from "./pages/auth/AuthCart.tsx";
 import './styles/index.scss'
+import Profile from "./pages/profile/Profile.tsx";
 
 const router = createBrowserRouter([
   {
@@ -14,11 +14,15 @@ const router = createBrowserRouter([
   },
   {
     path: "/registration",
-    element: <AuthCart><Registration /></AuthCart>
+    element: <Registration />
   },
   {
     path: "/login",
-    element: <AuthCart><Login /></AuthCart>
+    element: <Login />
+  },
+  {
+    path: "/profile",
+    element: <Profile />
   }
 ])
 
