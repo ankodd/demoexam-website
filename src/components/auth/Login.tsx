@@ -1,9 +1,10 @@
-import React, {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
-import Cookies from 'js-cookie';
-import Button from "../../ui/button/Button.tsx";
-import Input from "../../ui/input/Input.tsx";
-import Header from "../header/Header.tsx";
+import Cookies from 'js-cookie'
+import React, { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import Button from "../../ui/button/Button.tsx"
+import Input from "../../ui/input/Input.tsx"
+import Header from "../header/Header.tsx"
+import AlreadyLogged from './AlreadyLogged.tsx'
 
 interface LoginData {
   username: string
@@ -23,28 +24,14 @@ interface ResponseData {
  */
 function Login(): React.ReactElement {
   const navigate = useNavigate()
-  const [data, setData] = useState<LoginData>({
-    username: "",
-    password: "",
-  })
+  const [data, setData] = useState<LoginData>({} as LoginData)
   const [isLoading, setIsLoading] = useState(false)
-
-  const handleLogout = () => {
-    Cookies.remove("isLogged");
-    navigate('/');
-  }
-
   const isLogged = Cookies.get("isLogged");
+
   if (isLogged === "true") {
     return (
-      <div className="registration-cart">
-        <p>Вы уже вошли в систему</p>
-        <Button onClick={handleLogout} disabled={isLoading}>
-          {isLoading ? "Выход..." : "Выход из аккаунта"}
-        </Button>
-        <Link to="/profile">Перейти в профиль</Link>
-      </div>
-    );
+      <AlreadyLogged isLoading={isLoading}/>
+    )
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -61,7 +48,7 @@ function Login(): React.ReactElement {
 
       if (!response.ok) {
         throw new Error('Failed to login')
-      }
+      }    
 
       const res: ResponseData = await response.json()
       console.log(res.id)
@@ -93,15 +80,13 @@ function Login(): React.ReactElement {
             <label htmlFor="username" className="mr-12">Имя пользователя</label>
             <Input
               type="text"
-              name="username"
               id="username"
               value={data.username}
               required
               onChange={(e) => {
-                e.target.value = e.target.value.trim();
                 setData({
                   ...data,
-                  username: e.target.value,
+                  username: e.target.value.trim(),
                 });
               }}
             />
@@ -110,15 +95,13 @@ function Login(): React.ReactElement {
             <label htmlFor="password" className="mr-12">Пароль</label>
             <Input
               type="password"
-              name="password"
               id="password"
               value={data.password}
               required
               onChange={(e) => {
-                e.target.value = e.target.value.trim();
                 setData({
                   ...data,
-                  password: e.target.value,
+                  password: e.target.value.trim(),
                 });
               }}
             />

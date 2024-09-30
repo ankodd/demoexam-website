@@ -1,5 +1,4 @@
-import Header from "../../components/header/Header.tsx";
-import "./Home.scss";
+import Header from "../../components/header/Header.tsx"
 
 function Home() {
 	return (
@@ -17,7 +16,7 @@ function Home() {
 			{
 					to: "/profile",
 					label: "Профиль"
-			}
+			},
 			]}/>
 			<h1 className='poppins-bold text-3xl text-center my-40'>Добро пожаловать в сервис ремонта оборудования</h1>
 		</div>

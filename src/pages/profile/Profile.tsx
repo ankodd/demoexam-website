@@ -1,16 +1,10 @@
-import Cookies from "js-cookie";
-import React, {useEffect, useState} from "react";
-import Header from "../../components/header/Header.tsx";
-import {Link, useNavigate} from "react-router-dom";
-import Button from "../../ui/button/Button.tsx";
-
-interface UserData {
-	id: number
-	username: string
-	type: string
-	createdAt: string
-	phone: string
-}
+import Cookies from "js-cookie"
+import React, { useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import Header from "../../components/header/Header.tsx"
+import Button from "../../ui/button/Button.tsx"
+import UserData from './UserData.ts'
+import defaultUserData from './defaultUser.ts'
 
 /**
  * Profile page
@@ -22,9 +16,17 @@ interface UserData {
 function Profile(): React.ReactElement {
 	const navigate = useNavigate()
 	const [isLoading, setIsLoading] = useState(false)
-	const [userData, setUserData] = useState<UserData | null>(null)
+	const [userData, setUserData] = useState<UserData>(defaultUserData())
 	const userID = Cookies.get("userID")
 	const isLogged = Cookies.get("isLogged")
+
+	const label: Record<string, string> = {
+		id: "Уникатльный идентификатор",
+		created_at: "Дата регистрации",
+		username: "Логин",
+		type: "Тип",
+		phone: "Телефон",
+	}
 	
 	useEffect(() => {
 		const loadProfile = async () => {
@@ -49,7 +51,7 @@ function Profile(): React.ReactElement {
 				if (data) {
 					setUserData(data);
 				} else {
-					setUserData(null);
+					setUserData(defaultUserData());
 				}
 			});
 		}
@@ -59,14 +61,8 @@ function Profile(): React.ReactElement {
 		return (
 			<>
 				<Header links={[
-					{
-						to: "/login",
-						label: "Логин"
-					},
-					{
-						to: "/registration",
-						label: "Регистрация"
-					},
+					{to: "/login", label: "Логин"},
+					{to: "/registration", label: "Регистрация"},
 				]}/>
 				<p>Вы не авторизованы</p>
 			</>
@@ -79,21 +75,13 @@ function Profile(): React.ReactElement {
 			{isLoading ? <p>Загрузка...</p> :
 				<div>
 					<ul>
-						<li>
-							Имя пользователя: {userData?.username}
-						</li>
-						<li>
-							Дата регистрации: {userData?.createdAt}
-						</li>
-						<li>
-							Ваш уникальный идентификатор: {userData?.id}
-						</li>
-						<li>
-							Роль: {(userData?.type === "executor") ? "Исполнитель" : "Заказчик"}
-						</li>
-						<li>
-							Телефон: {userData?.phone}
-						</li>
+						{userData && Object.keys(userData || {}).map((key) => (
+								key !== 'password' && (
+									<li key={key}>
+										  {label[key]}: {key === 'type' ? (userData[key] === 'executor' ? 'Исполнитель' : 'Клиент') : userData[key]}
+									</li>
+								)
+							))}
 					</ul>
 					{userData?.type === "executor" ?
 						<div>
@@ -103,7 +91,9 @@ function Profile(): React.ReactElement {
 						:
 						<div>
 							<p>Вы можете создать заказ</p>
-							<button onClick={() => {}}>Создать</button>
+							<button onClick={() => {
+								navigate('/orders/create')
+							}}>Создать</button>
 						</div>
 					}
 					<Button onClick={() => {
