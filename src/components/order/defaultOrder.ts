@@ -6,10 +6,10 @@ function defaultOrder(): Order {
 		createdAt: '',
 		updatedAt: '',
 		hardware: '',
-		typeFailure: '',
+		type_failure: '',
 		description: '',
-		clientID: 0,
-		executorID: 0,
+		client: 0,
+		executor: 0,
 		status: '',
 	}
 }

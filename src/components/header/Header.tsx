@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import React from "react"
+import { Link } from "react-router-dom"
 import './Header.scss'
-import React from "react";
 
 interface Link {
 	to: string;

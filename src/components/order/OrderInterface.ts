@@ -3,10 +3,10 @@ interface Order extends Record<string | number, string | number>{
 	createdAt: string
 	updatedAt: string
 	hardware: string
-	typeFailure: string
+	type_failure: string
 	description: string
-	clientID: number
-	executorID: number
+	client: number
+	executor: number
 	status: string
 }
 

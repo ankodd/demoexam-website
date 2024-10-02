@@ -56,7 +56,7 @@ function Registration(): React.ReactElement {
         Cookies.set('isRegistered', 'true', { expires: 15 });
       }
 
-      if (Cookies.get("userType") == undefined) {
+      if (Cookies.get('type') == undefined) {
         Cookies.set('type', data.type, { expires: 15 });
       }
 

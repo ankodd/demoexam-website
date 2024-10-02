@@ -6,7 +6,15 @@ interface Props {
 	isLoading: boolean
 }
 
-function AlreadyLogged(props: Props) {
+/**
+ * Component that renders a message when the user is already logged in.
+ *
+ * @param {Props} props
+ * @prop {boolean} isLoading Whether the component is in a loading state
+ *
+ * @returns {React.ReactElement} JSX Element
+ */
+function AlreadyLogged(props: Props): React.ReactElement {
 	const navigate = useNavigate()
 	
 	const handleLogout = () => {
@@ -15,15 +23,15 @@ function AlreadyLogged(props: Props) {
 		navigate('/')
 	}
 
-		return (
-			<div className="registration-cart">
-				<p>Вы уже вошли в систему</p>
-				<Button onClick={handleLogout} disabled={props.isLoading}>
-					{props.isLoading ? "Выход..." : "Выход из аккаунта"}
-				</Button>
-				<Link to="/profile">Перейти в профиль</Link>
-			</div>
-		)
+	return (
+		<div className="registration-cart">
+			<p>Вы уже вошли в систему</p>
+			<Button onClick={handleLogout} disabled={props.isLoading}>
+				{props.isLoading ? "Выход..." : "Выход из аккаунта"}
+			</Button>
+			<Link to="/profile">Перейти в профиль</Link>
+		</div>
+	)
 }
 
 export default AlreadyLogged

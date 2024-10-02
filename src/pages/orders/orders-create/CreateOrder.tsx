@@ -37,11 +37,11 @@ function CreateOrder(): React.ReactElement {
 	const handleSumbit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		setIsLoading(true)
-		order.executorID = 0
+		order.executor = 0
 		order.status = 'waiting'
 
 		if (Cookies.get('userID') !== undefined) {
-			order.clientID = Number(Cookies.get('userID'))
+			order.client = Number(Cookies.get('userID'))
 		} else {
 			return (
 				<>
@@ -62,11 +62,20 @@ function CreateOrder(): React.ReactElement {
 				},
 				body: JSON.stringify(order),
 			})
+
 			if (!response.ok) {
 				console.log(await response.text())
+				console.log(order)
 				throw new Error('Failed to create order')
 			}
+
 			console.log('Order created successfully', `status: ${response.status}`)
+
+			const element = document.getElementById('message')
+			if (element) {
+				element.innerHTML = 'Заказ успешно создан!'
+				setOrder(defaultOrder())
+			}
 		} catch (error) {
 			console.log(error)
 		} finally {
@@ -113,19 +122,22 @@ function CreateOrder(): React.ReactElement {
 						<Input
 							type="text"
 							id="typeFailure"
-							value={order?.typeFailure}
+							value={order?.type_failure}
 							onChange={(e) => {
 								setOrder({
 									...order,
-									typeFailure: e.target.value.trim()
+									type_failure: e.target.value.trim()
 								})
-							} }
+							}}
 							required />
 					</div>
 					<div className="flex mb-8 justify-center items-center pt-8">
 						<Button type="submit" disabled={isLoading}>
 							{isLoading ? "Создание..." : "Создать"}
 						</Button>
+					</div>
+					<div className='flex my-4 justify-center items-center'>
+					<p id="message"></p>
 					</div>
 				</form>
 			</div>

@@ -7,6 +7,7 @@ import Registration from "./components/auth/Registration.tsx"
 import CreateOrder from './pages/orders/orders-create/CreateOrder.tsx'
 import Orders from './pages/orders/Orders.tsx'
 import Profile from "./pages/profile/Profile.tsx"
+import Statistics from './pages/statistics/Statistics.tsx'
 import './styles/index.scss'
 
 const router = createBrowserRouter([
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/orders/create",
     element: <CreateOrder />
+  },
+  {
+    path: "/statistics",
+    element: <Statistics />
   }
 ])
 

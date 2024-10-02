@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import Button from "../../ui/button/Button.tsx"
 import Input from "../../ui/input/Input.tsx"
-import Header from "../header/Header.tsx"
+import Header from '../header/Header.tsx'
 import AlreadyLogged from './AlreadyLogged.tsx'
 
 interface LoginData {

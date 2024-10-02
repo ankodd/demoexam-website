@@ -5,13 +5,13 @@ import Order from './OrderInterface'
 interface Labels {
 	[key: string]: string
 	id: string
-	created_at: string
-	updated_at: string
+	createdAt: string
+	updatedAt: string
 	hardware: string
-	typeFailure: string
+	type_failure: string
 	description: string
-	clientID: string
-	executorID: string
+	client_id: string
+	executor_id: string
 	status: string
 }
 
@@ -27,20 +27,20 @@ interface Labels {
 function OrderCart({ order }: { order: Order }): React.ReactElement {
 	const labels: Labels = {
 		id: 'Уникальный идентификатор',
-  	created_at: 'Дата создания',
-  	updated_at: 'Дата обновления',
+  	createdAt: 'Дата создания',
+  	updatedAt: 'Дата обновления',
   	hardware: 'Оборудование',
-  	typeFailure: 'Тип неисправности',
+  	type_failure: 'Тип неисправности',
   	description: 'Описание',
-  	clientID: 'Клиент',
-  	executorID: 'Исполнитель',
+  	client_id: 'Клиент',
+  	executor_id: 'Исполнитель',
   	status: 'Статус'
 	}
 
 	const changeStatus = async () => {
 		const orderRequset = { 
 			...order, status: order.status === 'working' ? 'done' : 'working',
-			executorID :
+			executor_id :
 			Cookies.get('userID') !== undefined ? Number(Cookies.get('userID')) : 0
 		}
 
@@ -83,7 +83,7 @@ function OrderCart({ order }: { order: Order }): React.ReactElement {
 								case 'working':
 									return <Button onClick={changeStatus}>Завершить</Button>;
 								default:
-									return null; // or some other default value
+									return null;
 							}
 						})()
 					}

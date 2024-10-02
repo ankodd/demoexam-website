@@ -1,7 +1,8 @@
-import { ButtonHTMLAttributes } from "react"
+import { ButtonHTMLAttributes } from 'react'
 
 
-function Button({ children, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
+function Button({ children, ...props} 
+	: ButtonHTMLAttributes<HTMLButtonElement>) {
 	return (
 		<button
 			{...props}
